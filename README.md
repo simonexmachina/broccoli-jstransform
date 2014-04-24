@@ -26,11 +26,11 @@ var applicationJs = compileES6(sourceTree, {
   to be performed. Defaults to the full set of transforms included in jstranform.
   Options are:
 
-  es6-arrow-function-visitors  
-  es6-class-visitors  
-  es6-object-short-notation-visitors  
-  es6-rest-param-visitors  
-  es6-template-visitors
+  es6-arrow-function  
+  es6-class  
+  es6-object-short-notation  
+  es6-rest-param  
+  es6-template
 * `.visitors` (array): An array of custom tranforms. If `.transforms` is specified 
   then this option is ignored.
 * `.ignoredFiles` (array): An array of file paths to ignore. These are included

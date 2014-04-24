@@ -34,18 +34,18 @@ JSTransformPlugin.prototype.processString = function(fileContents, relativePath)
 
 function defaultVisitors() {
   return jstransformVisitors([
-    'es6-arrow-function-visitors',
-    'es6-class-visitors',
-    'es6-object-short-notation-visitors',
-    'es6-rest-param-visitors',
-    'es6-template-visitors'
+    'es6-arrow-function',
+    'es6-class',
+    'es6-object-short-notation',
+    'es6-rest-param',
+    'es6-template'
   ]);
 }
 
 function jstransformVisitors(transforms) {
   var visitors = [];
   transforms.forEach(function(transform) {
-    var visitor = require('jstransform/visitors/' + transform);
+    var visitor = require('jstransform/visitors/' + transform + '-visitors');
     visitors = visitors.concat(visitor.visitorList);
   });
   return visitors;
