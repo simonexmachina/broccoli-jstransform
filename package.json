@@ -1,0 +1,31 @@
+{
+  "name": "broccoli-jstransform",
+  "version": "0.1.0",
+  "description": "Broccoli plugin to transform ES6 to ES5",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aexmachina/broccoli-jstransform"
+  },
+  "keywords": [
+    "jstransform",
+    "broccoli-plugin",
+    "ES6",
+    "ES5",
+    "convert"
+  ],
+  "author": "Simon Wade",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/aexmachina/broccoli-jstransform/issues"
+  },
+  "homepage": "https://github.com/aexmachina/broccoli-jstransform",
+  "dependencies": {
+    "jstransform": "^4.0.0",
+    "broccoli-filter": "^0.1.6"
+  },
+  "devDependencies": {}
+}
