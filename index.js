@@ -1,5 +1,6 @@
 var Filter = require('broccoli-filter'),
-    jstransform = require('jstransform');
+    jstransform = require('jstransform'),
+    minimatch = require('minimatch');
 
 module.exports = JSTransformPlugin;
 JSTransformPlugin.prototype = Object.create(Filter.prototype);
@@ -23,13 +24,31 @@ function JSTransformPlugin(inputTree, options) {
     this.visitors = this.options.visitors || defaultVisitors();
   }
   Filter.call(this, inputTree, this.options);
+  this.ignoreRegExps = this.options.ignoredFiles.map(function(pattern) {
+    return minimatch.makeRe(pattern);
+  });
 }
 
 JSTransformPlugin.prototype.processString = function(fileContents, relativePath) {
-  if (this.options.ignoredFiles.indexOf(relativePath) === -1) {
-    fileContents = jstransform.transform(this.visitors, fileContents).code;
+  if (this.shouldTransform(relativePath)) {
+    try {
+      fileContents = jstransform.transform(this.visitors, fileContents).code;
+    }
+    catch(e) {
+      e.message = "Call to jstransform.transform() failed for file '" + relativePath + "': " + e.message;
+      throw e;
+    }
   }
   return fileContents;
+};
+
+JSTransformPlugin.prototype.shouldTransform = function(relativePath) {
+  for (var i = 0; i < this.ignoreRegExps.length; i++) {
+    if (this.ignoreRegExps[i].test(relativePath)) {
+      return false;
+    }
+  }
+  return true;
 };
 
 function defaultVisitors() {

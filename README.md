@@ -35,5 +35,6 @@ var applicationJs = compileES6(sourceTree, {
 * `.visitors` (array): An array of custom tranforms. If `.transforms` is specified 
   then this option is ignored.
 * `.ignoredFiles` (array): An array of file paths to ignore. These are included
-  in the output tree without being transformed.
+  in the output tree without being transformed. [Glob patterns](https://github.com/isaacs/minimatch) 
+  can be used.
 * `.extensions` (array): File extensions to transform. Defaults to '.js'
