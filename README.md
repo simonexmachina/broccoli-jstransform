@@ -38,3 +38,4 @@ var applicationJs = compileES6(sourceTree, {
   in the output tree without being transformed. [Glob patterns](https://github.com/isaacs/minimatch) 
   can be used.
 * `.extensions` (array): File extensions to transform. Defaults to '.js'
+* `.sourceMap`: Create source maps (experimental)
