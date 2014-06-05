@@ -1,6 +1,8 @@
 var Filter = require('broccoli-filter'),
     jstransform = require('jstransform'),
-    minimatch = require('minimatch');
+    minimatch = require('minimatch'),
+    fs = require('fs'),
+    Promise = require('rsvp').Promise;
 
 module.exports = JSTransformPlugin;
 JSTransformPlugin.prototype = Object.create(Filter.prototype);
@@ -10,7 +12,9 @@ function JSTransformPlugin(inputTree, options) {
   this.options = {
     extensions: ['js'],
     ignoredFiles: [],
-    visitors: null
+    visitors: null,
+    sourceMap: false,
+    glob: minimatch.makeRe('{**/,}*.js')
   };
   for (var key in options) {
     if (this.options.hasOwnProperty(key)) {
@@ -29,20 +33,33 @@ function JSTransformPlugin(inputTree, options) {
   });
 }
 
+JSTransformPlugin.prototype.processFile = function (srcDir, destDir, relativePath) {
+  var self = this
+  var string = fs.readFileSync(srcDir + '/' + relativePath, { encoding: 'utf8' })
+  return Promise.resolve(self.processString(string, relativePath))
+    .then(function(transformed) {
+      var outputPath = self.getDestFilePath(relativePath)
+      fs.writeFileSync(destDir + '/' + outputPath, transformed.code, { encoding: 'utf8' })
+      if (self.options.sourceMap) {
+        var sourceMap = transformed.sourceMap.toString();
+        fs.writeFileSync(destDir + '/' + outputPath + ".map", sourceMap, { encoding: 'utf8' })
+      }
+    });
+}
+
 JSTransformPlugin.prototype.processString = function(fileContents, relativePath) {
-  if (this.shouldTransform(relativePath)) {
-    try {
-      fileContents = jstransform.transform(this.visitors, fileContents).code;
-    }
-    catch(e) {
-      e.message = "Call to jstransform.transform() failed for file '" + relativePath + "': " + e.message;
-      throw e;
-    }
+  try {
+    return jstransform.transform(this.visitors, fileContents, this.options);
+  }
+  catch(e) {
+    e.message = "Call to jstransform.transform() failed for file '" + relativePath + "': " + e.message;
+    throw e;
   }
   return fileContents;
 };
 
-JSTransformPlugin.prototype.shouldTransform = function(relativePath) {
+JSTransformPlugin.prototype.canProcessFile = function(relativePath) {
+  if (this.options.glob && !this.options.glob.test(relativePath)) return false;
   for (var i = 0; i < this.ignoreRegExps.length; i++) {
     if (this.ignoreRegExps[i].test(relativePath)) {
       return false;
