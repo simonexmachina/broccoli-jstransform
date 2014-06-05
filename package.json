@@ -1,6 +1,6 @@
 {
   "name": "broccoli-jstransform",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Broccoli plugin to transform ES6 to ES5",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,7 @@
   "homepage": "https://github.com/aexmachina/broccoli-jstransform",
   "dependencies": {
     "broccoli-filter": "^0.1.6",
-    "jstransform": "^4.0.0",
+    "jstransform": "aexmachina/jstransform",
     "minimatch": "^0.3.0",
     "rsvp": "^3.0.8"
   },

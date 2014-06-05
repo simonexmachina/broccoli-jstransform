@@ -1,6 +1,7 @@
 var Filter = require('broccoli-filter'),
     jstransform = require('jstransform'),
     minimatch = require('minimatch'),
+    path = require('path'),
     fs = require('fs'),
     Promise = require('rsvp').Promise;
 
@@ -34,21 +35,31 @@ function JSTransformPlugin(inputTree, options) {
 }
 
 JSTransformPlugin.prototype.processFile = function (srcDir, destDir, relativePath) {
-  var self = this
-  var string = fs.readFileSync(srcDir + '/' + relativePath, { encoding: 'utf8' })
+  var self = this;
+  var string = fs.readFileSync(srcDir + '/' + relativePath, { encoding: 'utf8' });
   return Promise.resolve(self.processString(string, relativePath))
     .then(function(transformed) {
-      var outputPath = self.getDestFilePath(relativePath)
-      fs.writeFileSync(destDir + '/' + outputPath, transformed.code, { encoding: 'utf8' })
+      var destFile = self.getDestFilePath(relativePath),
+          outputPath = destDir + '/' + destFile,
+          outputFiles = [destFile];
       if (self.options.sourceMap) {
         var sourceMap = transformed.sourceMap.toString();
-        fs.writeFileSync(destDir + '/' + outputPath + ".map", sourceMap, { encoding: 'utf8' })
+        fs.writeFileSync(outputPath + ".map", sourceMap, { encoding: 'utf8' });
+        transformed.code += "\n//# sourceMappingURL=" + path.basename(relativePath) + ".map";
+        outputFiles.push(destFile + ".map");
       }
+      fs.writeFileSync(outputPath, transformed.code, { encoding: 'utf8' });
+      var cacheInfo = {
+        inputFiles: [relativePath],
+        outputFiles: outputFiles
+      };
+      return cacheInfo;
     });
 }
 
 JSTransformPlugin.prototype.processString = function(fileContents, relativePath) {
   try {
+    this.options.filename = path.basename(relativePath);
     return jstransform.transform(this.visitors, fileContents, this.options);
   }
   catch(e) {
