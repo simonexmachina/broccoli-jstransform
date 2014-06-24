@@ -14,6 +14,7 @@ function JSTransformPlugin(inputTree, options) {
     extensions: ['js'],
     ignoredFiles: [],
     visitors: null,
+    transforms: null,
     sourceMap: false,
     glob: minimatch.makeRe('{**/,}*.js')
   };
