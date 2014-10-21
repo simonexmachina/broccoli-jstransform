@@ -13,11 +13,7 @@ npm install --save-dev broccoli-jstransform
 
 ```js
 var compileES6 = require('broccoli-jstransform');
-var applicationJs = compileES6(sourceTree, {
-  ignoredFiles: [
-    'foo/bar.js'
-  ]
-});
+var applicationJs = compileES6(sourceTree, options);
 ```
 
 ### Options

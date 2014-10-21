@@ -24,8 +24,8 @@
   },
   "homepage": "https://github.com/aexmachina/broccoli-jstransform",
   "dependencies": {
-    "broccoli-filter": "^0.1.6",
-    "jstransform": "^6.0.0",
+    "broccoli-filter": "^0.1.7",
+    "jstransform": "^6.3.2",
     "minimatch": "^0.3.0",
     "rsvp": "^3.0.8"
   },
