@@ -1,6 +1,6 @@
 {
   "name": "broccoli-jstransform",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Broccoli plugin to transform ES6 to ES5",
   "main": "index.js",
   "scripts": {
