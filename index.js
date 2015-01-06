@@ -89,7 +89,9 @@ function defaultVisitors() {
     'es6-object-short-notation',
     'es6-rest-param',
     'es6-template',
-    'es7-spread-property'
+    'es7-rest-property',
+    'es7-spread-property',
+    'reserved-words'
   ]);
 }
 
